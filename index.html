@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+    <meta name="renderer" content="webkit" />
+    <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css">
+    <title>HTML++</title>
+</head>
+
+<body class="mdui-theme-accent-green mdui-theme-primary-orange">
+    <div class="mdui-appbar">
+        <div class="mdui-toolbar mdui-color-theme">
+          <a href="javascript:;" class="mdui-typo-title">HTML++</a>
+        </div>
+      </div>
+    <br>
+    <input type="file" accept=".html" id="htmlreader" style="display: none;"/>
+    <input type="file" id="imgreader" style="display: none;"/>
+    <a id="downloadhelper" download></a>
+    <div class="mdui-container">
+        <label class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" for="htmlreader">打开</label>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="newhtml()">新建</button>
+    </div>
+    <div class="mdui-container"  style="display: none;" id="main">
+        <div class="mdui-textfield">
+            <input id="name" class="mdui-textfield-input" type="text" placeholder="文件名"/>
+        </div>
+        <br>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="save()">保存</button>
+        <label class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" for="imgreader">插入图片</label>
+        <br><br><br>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="titleedit('h1')">H1</button>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="titleedit('h2')">H2</button>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="titleedit('h3')">H3</button>
+        <br>
+        <br>
+        <br>
+        <div id="text" contenteditable="true" style="border-style: groove; border-width:3px;border-color: red;height: 300px"></div>
+    </div>
+    <script>
+        function save() {
+            htmlblob = new Blob([document.getElementById('text').innerHTML],  { type: "text/html" })
+            helper = document.getElementById('downloadhelper')
+            helper.href = URL.createObjectURL(htmlblob)
+            helper.download = document.getElementById('name').value
+            helper.click()
+        }
+        function titleedit(h) {
+            if (window.getSelection().toString()) {
+                selection = window.getSelection()
+                range = selection.getRangeAt(0)
+                content = selection.toString()
+                title = document.createElement(h)
+                titlecontent = document.createTextNode(content)
+                title.appendChild(titlecontent)
+                range.deleteContents()
+                range.insertNode(title)
+            }
+        }
+        function imageprocess() {
+
+        }
+        function newhtml() {
+            document.getElementById('text').innerHTML = '<br>'
+            document.getElementById('name').value = ''
+            document.getElementById('main').style.display = ''
+
+        }
+        document.getElementById('htmlreader').addEventListener("change", handlehtml, false)
+        function handlehtml() {
+            file = this.files[0]
+            file.text().then(function (htmltext) {
+                document.getElementById('text').innerHTML = htmltext
+            })
+            document.getElementById('main').style.display = ''
+            document.getElementById('name').value = file.name
+        }
+        document.getElementById('imgreader').addEventListener("change", handleimg, false)
+        function handleimg() {
+            var reader = new FileReader();
+            reader.readAsDataURL(this.files[0]);
+            reader.onload = function(){
+                imgele = document.createElement('img')
+                imgele.src = reader.result
+                imgele.style.width = '100%'
+                document.getElementById('text').appendChild(imgele)
+            }
+            
+        }
+        
+    </script>
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+</body>
+
+</html>
