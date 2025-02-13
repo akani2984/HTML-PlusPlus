@@ -9,14 +9,14 @@
     <title>HTML++</title>
 </head>
 
-<body class="mdui-theme-accent-green mdui-theme-primary-orange">
-    <div class="mdui-appbar">
+<body class=" mdui-appbar-with-toolbar mdui-theme-accent-green mdui-theme-primary-orange">
+    <div class="mdui-appbar mdui-appbar-fixed">
         <div class="mdui-toolbar mdui-color-theme">
           <a href="javascript:;" class="mdui-typo-title">HTML++</a>
         </div>
       </div>
     <br>
-    <input type="file" accept=".html" id="htmlreader" style="display: none;"/>
+    <input type="file"  id="htmlreader" style="display: none;"/>
     <input type="file" id="imgreader" style="display: none;"/>
     <a id="downloadhelper" download></a>
     <div class="mdui-container">
@@ -30,14 +30,21 @@
         <br>
         <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="save()">保存</button>
         <label class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" for="imgreader">插入图片</label>
-        <br><br><br>
+        <br>
+        <br>
         <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="titleedit('h1')">H1</button>
         <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="titleedit('h2')">H2</button>
         <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="titleedit('h3')">H3</button>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="titleedit('div')">正文</button>
+        <br>
+        <br>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="alignedit('left')">左对齐</button>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="alignedit('center')">居中</button>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="alignedit('right')">右对齐</button>
         <br>
         <br>
         <br>
-        <div id="text" contenteditable="true" style="border-style: groove; overflow:auto; border-width:3px;border-color: red;height: 300px"></div>
+        <div id="text" contenteditable="true" style="border-style: groove; overflow:auto ;border-width:3px;border-color: red;height: 300px"></div>
     </div>
     <script>
         function save() {
@@ -46,6 +53,18 @@
             helper.href = URL.createObjectURL(htmlblob)
             helper.download = document.getElementById('name').value
             helper.click()
+        }
+        function alignedit(newalign) {
+            if (window.getSelection().toString()) {
+                selection = window.getSelection()
+                range = selection.getRangeAt(0)
+                if (range.commonAncestorContainer.nodeType === Node.TEXT_NODE) {
+                    range.commonAncestorContainer.parentElement.style.textAlign = newalign
+                } else {
+                    range.commonAncestorContainer.style.textAlign = newalign
+                }
+                return container.tagName.toLowerCase();
+            }
         }
         function titleedit(h) {
             if (window.getSelection().toString()) {
@@ -63,7 +82,7 @@
 
         }
         function newhtml() {
-            document.getElementById('text').innerHTML = '<br>'
+            document.getElementById('text').innerHTML = ''
             document.getElementById('name').value = ''
             document.getElementById('main').style.display = ''
 
